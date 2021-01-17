@@ -16,22 +16,34 @@ client.on('message', async msg => {
   if (parsed.command === 'yahoo') {
     const id = uuidv4();
     const symbol = parsed.reader.getString();
+    msg.channel.send('Working on it...');
     try {
       await captureWebsite.file(`https://finance.yahoo.com/quote/${symbol}/chart?p=${symbol}`,
         `./shots/${id}.png`,
         {
+          // beforeScreenshot: async (page, browser) => {
+          //   page.addStyleTag({
+          //     content: `
+          //
+          //     `
+          //   })
+          // },
           hideElements: [
             '#YDC-UH',
             '#mrt-node-Col1-7-Footer'
           ],
-          scrollToElement: '.qsp-watchlist-add',
-          emulateDevice: 'iPhone X',
+          fullPage: true,
+          //scrollToElement: '.qsp-watchlist-add',
+          emulateDevice: 'iPad',
+          element: '.stx-panel-chart',
+          timeout: 10,
         });
       msg.channel.send('Here you go!', {
         files: [`./shots/${id}.png`]
       });
     } catch (e) {
-      msg.channel.send('Seems invalid...');
+      console.log(e);
+      msg.channel.send(`Seems invalid...${symbol}?`);
     }
   }
 });
