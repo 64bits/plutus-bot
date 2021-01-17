@@ -22,13 +22,6 @@ client.on('message', async msg => {
       await captureWebsite.file(`https://finance.yahoo.com/quote/${symbol}/chart?p=${symbol}`,
         `./shots/${id}.png`,
         {
-          // beforeScreenshot: async (page, browser) => {
-          //   page.addStyleTag({
-          //     content: `
-          //
-          //     `
-          //   })
-          // },
           hideElements: [
             '#YDC-UH',
             '#mrt-node-Col1-7-Footer'
