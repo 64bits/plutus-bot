@@ -4,6 +4,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const { parse } = require('discord-command-parser');
 const captureWebsite = require('capture-website');
+const fs = require('fs');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -36,13 +37,16 @@ client.on('message', async msg => {
           //scrollToElement: '.qsp-watchlist-add',
           emulateDevice: 'iPad',
           element: '.stx-panel-chart',
-          timeout: 10,
+          timeout: 20,
         });
-      msg.channel.send('Here you go!', {
+      await msg.channel.send('Here you go!', {
         files: [`./shots/${id}.png`]
       });
-    } catch (e) {
-      console.log(e);
+      fs.unlink(`./shots/${id}.png`, (err) => {
+        console.error(err);
+      });
+    } catch (err) {
+      console.error(err);
       msg.channel.send(`Seems invalid...${symbol}?`);
     }
   }
