@@ -1,6 +1,6 @@
 const { encode } = require('js-base64');
 const referenceParams = require('./reference-params');
-const randomColor = require('randomcolor');
+const randomColor = require('./random-color');
 
 function generateSymbolObject(symbol, period) {
   return {
@@ -23,7 +23,7 @@ function generateSymbolObject(symbol, period) {
     },
     "id":`${symbol}`,
     "parameters":{
-      "color": randomColor({ luminosity: 'dark' }),
+      "color": randomColor(),
       "width":2,
       "isComparison":true,
       "shareYAxis":true,

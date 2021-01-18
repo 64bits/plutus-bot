@@ -21,8 +21,9 @@ client.on('message', async msg => {
     const firstSymbol = symbols[0];
     const period = parsed.reader.getString(false, s => s.split(',').length === 3);
     msg.channel.send('Working on it...');
+    const generatedUrl = `https://finance.yahoo.com/quote/${firstSymbol}/chart?p=${firstSymbol}#${generateParams({ symbols, period })}`;
     try {
-      await captureWebsite.file(`https://finance.yahoo.com/quote/${firstSymbol}/chart?p=${firstSymbol}#${generateParams({ symbols, period })}`,
+      await captureWebsite.file(generatedUrl,
         `./shots/${id}.png`,
         {
           hideElements: [
