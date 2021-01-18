@@ -2,21 +2,21 @@ const { encode } = require('js-base64');
 const referenceParams = require('./reference-params');
 const randomColor = require('randomcolor');
 
-function generateSymbolObject(symbol) {
+function generateSymbolObject(symbol, period) {
   return {
     "symbol":`${symbol}`,
     "symbolObject":{
       "symbol":`${symbol}`
     },
     "periodicity":1,
-    "interval":"day",
+    "interval":period[0],
     "timeUnit":null,
     "setSpan":{
-      "multiplier":3,
-      "base":"month",
+      "multiplier":parseInt(period[1], 10),
+      "base":period[2],
       "periodicity":{
         "period":1,
-        "interval":"day"
+        "interval":period[0]
       },
       "maintainPeriodicity":true,
       "forceLoad":true
@@ -49,10 +49,11 @@ function generateSymbolObject(symbol) {
   };
 }
 
-module.exports = function ({ symbols }) {
-  let currentParams = JSON.parse(JSON.stringify(referenceParams));
+module.exports = function ({ symbols, period }) {
+  let parsedPeriod = period ? period.split(',') : ['day', '3', 'month'];
+  let currentParams = JSON.parse(JSON.stringify(referenceParams(parsedPeriod)));
   symbols.forEach((symbol) => {
-    currentParams.symbols.push(generateSymbolObject(symbol))
+    currentParams.symbols.push(generateSymbolObject(symbol, parsedPeriod))
   });
   return encode(JSON.stringify(currentParams));
 };

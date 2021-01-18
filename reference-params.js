@@ -1,5 +1,5 @@
-module.exports = {
-  "interval":"day",
+module.exports = (period) => ({
+  "interval":period[0],
   "periodicity":1,
   "timeUnit":null,
   "candleWidth":18.387096774193548,
@@ -35,11 +35,11 @@ module.exports = {
     }
   },
   "setSpan":{
-    "multiplier":3,
-    "base":"month",
+    "multiplier":parseInt(period[1], 10),
+    "base":period[2],
     "periodicity":{
       "period":1,
-      "interval":"day"
+      "interval":period[0]
     },
     "maintainPeriodicity":true,
     "forceLoad":true
@@ -319,4 +319,4 @@ module.exports = {
       }
     }
   }
-};
+});

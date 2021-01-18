@@ -15,13 +15,14 @@ client.on('message', async msg => {
   const parsed = parse(msg, '?');
   // User isn't trying to invoke the bot, leave it
   if(!parsed.success) return;
-  if (parsed.command === process.env.COMMAND || 'yahoo') {
+  if(parsed.command === (process.env.COMMAND || 'yahoo')) {
     const id = uuidv4();
     const symbols = parsed.reader.getString().split(',');
     const firstSymbol = symbols[0];
+    const period = parsed.reader.getString(false, s => s.split(',').length === 3);
     msg.channel.send('Working on it...');
     try {
-      await captureWebsite.file(`https://finance.yahoo.com/quote/${firstSymbol}/chart?p=${firstSymbol}#${generateParams({ symbols })}`,
+      await captureWebsite.file(`https://finance.yahoo.com/quote/${firstSymbol}/chart?p=${firstSymbol}#${generateParams({ symbols, period })}`,
         `./shots/${id}.png`,
         {
           hideElements: [
