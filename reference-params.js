@@ -1,7 +1,7 @@
 module.exports = (period) => ({
   "interval":period[0],
   "periodicity":1,
-  "timeUnit":null,
+  "timeUnit":period[1],
   "candleWidth":18.387096774193548,
   "flipped":false,
   "volumeUnderlay":true,
@@ -10,8 +10,8 @@ module.exports = (period) => ({
   "chartType":"line",
   "extended":true,
   "marketSessions":{
-    "pre":true,
-    "post":true
+    // "pre":true,
+    // "post":true
   },
   "aggregationType":"ohlc",
   "chartScale":"percent",
@@ -35,11 +35,12 @@ module.exports = (period) => ({
     }
   },
   "setSpan":{
-    "multiplier":parseInt(period[1], 10),
-    "base":period[2],
+    "multiplier":period[2],
+    "base":period[3],
     "periodicity":{
       "period":1,
-      "interval":period[0]
+      "interval":period[0],
+      "timeUnit": period[1],
     },
     "maintainPeriodicity":true,
     "forceLoad":true
@@ -59,245 +60,7 @@ module.exports = (period) => ({
     }
   },
   "symbols":[
-    // {
-    //   "symbol":"U",
-    //   "symbolObject":{
-    //     "symbol":"U",
-    //     "quoteType":"EQUITY",
-    //     "exchangeTimeZone":"America/New_York"
-    //   },
-    //   "periodicity":1,
-    //   "interval":"day",
-    //   "timeUnit":null,
-    //   "setSpan":{
-    //     "multiplier":3,
-    //     "base":"month",
-    //     "periodicity":{
-    //       "period":1,
-    //       "interval":"day"
-    //     },
-    //     "maintainPeriodicity":true,
-    //     "forceLoad":true
-    //   }
-    // },
-    // {
-    //   "symbol":"BTC-USD",
-    //   "symbolObject":{
-    //     "symbol":"BTC-USD"
-    //   },
-    //   "periodicity":1,
-    //   "interval":"day",
-    //   "timeUnit":null,
-    //   "setSpan":{
-    //     "multiplier":3,
-    //     "base":"month",
-    //     "periodicity":{
-    //       "period":1,
-    //       "interval":"day"
-    //     },
-    //     "maintainPeriodicity":true,
-    //     "forceLoad":true
-    //   },
-    //   "id":"BTC-USD",
-    //   "parameters":{
-    //     "color":"#72d3ff",
-    //     "width":2,
-    //     "isComparison":true,
-    //     "shareYAxis":true,
-    //     "chartName":"chart",
-    //     "symbolObject":{
-    //       "symbol":"BTC-USD"
-    //     },
-    //     "panel":"chart",
-    //     "fillGaps":false,
-    //     "action":"add-series",
-    //     "symbol":"BTC-USD",
-    //     "gapDisplayStyle":"transparent",
-    //     "name":"BTC-USD",
-    //     "overChart":true,
-    //     "useChartLegend":true,
-    //     "heightPercentage":0.7,
-    //     "opacity":1,
-    //     "highlightable":true,
-    //     "type":"line",
-    //     "style":"stx_line_chart",
-    //     "highlight":false
-    //   }
-    // },
-    // {
-    //   "symbol":"ETH-USD",
-    //   "symbolObject":{
-    //     "symbol":"ETH-USD"
-    //   },
-    //   "periodicity":1,
-    //   "interval":"day",
-    //   "timeUnit":null,
-    //   "setSpan":{
-    //     "multiplier":3,
-    //     "base":"month",
-    //     "periodicity":{
-    //       "period":1,
-    //       "interval":"day"
-    //     },
-    //     "maintainPeriodicity":true,
-    //     "forceLoad":true
-    //   },
-    //   "id":"ETH-USD",
-    //   "parameters":{
-    //     "color":"#ad6eff",
-    //     "width":2,
-    //     "isComparison":true,
-    //     "shareYAxis":true,
-    //     "chartName":"chart",
-    //     "symbolObject":{
-    //       "symbol":"ETH-USD"
-    //     },
-    //     "panel":"chart",
-    //     "fillGaps":false,
-    //     "action":"add-series",
-    //     "symbol":"ETH-USD",
-    //     "gapDisplayStyle":"transparent",
-    //     "name":"ETH-USD",
-    //     "overChart":true,
-    //     "useChartLegend":true,
-    //     "heightPercentage":0.7,
-    //     "opacity":1,
-    //     "highlightable":true,
-    //     "type":"line",
-    //     "style":"stx_line_chart",
-    //     "highlight":false
-    //   }
-    // },
-    // {
-    //   "symbol":"FB",
-    //   "symbolObject":{
-    //     "symbol":"FB"
-    //   },
-    //   "periodicity":1,
-    //   "interval":"day",
-    //   "timeUnit":null,
-    //   "setSpan":{
-    //     "multiplier":3,
-    //     "base":"month",
-    //     "periodicity":{
-    //       "period":1,
-    //       "interval":"day"
-    //     },
-    //     "maintainPeriodicity":true,
-    //     "forceLoad":true
-    //   },
-    //   "id":"FB",
-    //   "parameters":{
-    //     "color":"#ff80c5",
-    //     "width":2,
-    //     "isComparison":true,
-    //     "shareYAxis":true,
-    //     "chartName":"chart",
-    //     "symbolObject":{
-    //       "symbol":"FB"
-    //     },
-    //     "panel":"chart",
-    //     "fillGaps":false,
-    //     "action":"add-series",
-    //     "symbol":"FB",
-    //     "gapDisplayStyle":"transparent",
-    //     "name":"FB",
-    //     "overChart":true,
-    //     "useChartLegend":true,
-    //     "heightPercentage":0.7,
-    //     "opacity":1,
-    //     "highlightable":true,
-    //     "type":"line",
-    //     "style":"stx_line_chart",
-    //     "highlight":false
-    //   }
-    // },
-    // {
-    //   "symbol":"JPYUSD=X",
-    //   "symbolObject":{
-    //     "symbol":"JPYUSD=X"
-    //   },
-    //   "periodicity":1,
-    //   "interval":"day",
-    //   "timeUnit":null,
-    //   "setSpan":{
-    //     "multiplier":3,
-    //     "base":"month",
-    //     "periodicity":{
-    //       "period":1,
-    //       "interval":"day"
-    //     },
-    //     "maintainPeriodicity":true,
-    //     "forceLoad":true
-    //   },
-    //   "id":"JPYUSD=X",
-    //   "parameters":{
-    //     "color":"#ffbd74",
-    //     "width":2,
-    //     "isComparison":true,
-    //     "shareYAxis":true,
-    //     "chartName":"chart",
-    //     "symbolObject":{
-    //       "symbol":"JPYUSD=X"
-    //     },
-    //     "panel":"chart",
-    //     "fillGaps":false,
-    //     "action":"add-series",
-    //     "symbol":"JPYUSD=X",
-    //     "gapDisplayStyle":"transparent",
-    //     "name":"JPYUSD=X",
-    //     "overChart":true,
-    //     "useChartLegend":true,
-    //     "heightPercentage":0.7,
-    //     "opacity":1,
-    //     "highlightable":true,
-    //     "type":"line",
-    //     "style":"stx_line_chart"
-    //   }
-    // },
-    // {
-    //   "symbol":"^DJI",
-    //   "symbolObject":{
-    //     "symbol":"^DJI"
-    //   },
-    //   "periodicity":1,
-    //   "interval":"day",
-    //   "timeUnit":null,
-    //   "setSpan":{
-    //     "multiplier":3,
-    //     "base":"month",
-    //     "periodicity":{
-    //       "period":1,
-    //       "interval":"day"
-    //     },
-    //     "maintainPeriodicity":true,
-    //     "forceLoad":true
-    //   },
-    //   "id":"^DJI",
-    //   "parameters":{
-    //     "color":"#ffe786",
-    //     "width":2,
-    //     "isComparison":true,
-    //     "shareYAxis":true,
-    //     "chartName":"chart",
-    //     "symbolObject":{
-    //       "symbol":"^DJI"
-    //     },
-    //     "panel":"chart",
-    //     "fillGaps":false,
-    //     "action":"add-series",
-    //     "symbol":"^DJI",
-    //     "gapDisplayStyle":"transparent",
-    //     "name":"^DJI",
-    //     "overChart":true,
-    //     "useChartLegend":true,
-    //     "heightPercentage":0.7,
-    //     "opacity":1,
-    //     "highlightable":true,
-    //     "type":"line",
-    //     "style":"stx_line_chart"
-    //   }
-    // }
+    // Included later
   ],
   "customRange":null,
   "studies":{

@@ -2,17 +2,17 @@ const { encode } = require('js-base64');
 const referenceParams = require('./reference-params');
 const randomColor = require('./random-color');
 
-const shorthandToPeriod = {
-  d: 'day',
-  m: 'month',
-  y: 'year',
-}
-
-const defaultIntervals = {
-  d: 'minute',
-  m: 'hour',
-  y: 'week',
-}
+const periods = {
+  '1d': [1, 'minute', 1, 'day'],
+  '5d': [5, 'minute', 5, 'day'],
+  '1m': [1, 'day', 1, 'month'],
+  '3m': [1, 'day', 3, 'month'],
+  '6m': [1, 'day', 6, 'month'],
+  '1y': [1, 'day', 1, 'year'],
+  '2y': [1, 'week', 2, 'year'],
+  '5y': [1, 'week', 5, 'year'],
+  'max': [1, 'week', 1, 'all'],
+};
 
 function generateSymbolObject(symbol, period) {
   return {
@@ -21,14 +21,15 @@ function generateSymbolObject(symbol, period) {
       "symbol":`${symbol}`
     },
     "periodicity":1,
-    "interval":period[0],
-    "timeUnit":null,
+    "interval":period[0] === 'minute' ? 5 : 1,
+    "timeUnit":period[0],
     "setSpan":{
       "multiplier":parseInt(period[1], 10),
       "base":period[2],
       "periodicity":{
         "period":1,
-        "interval":period[0]
+        "interval":period[0] === 'minute' ? 5 : 1,
+        "timeUnit":period[0],
       },
       "maintainPeriodicity":true,
       "forceLoad":true
@@ -61,13 +62,10 @@ function generateSymbolObject(symbol, period) {
   };
 }
 
-module.exports = function ({ symbols, period }) {
-  let parsedPeriod = ['day', '3', 'month'];
-  if (period) {
-    const groups = period.match(/^([0-9]{1,2})([mdy])$/);
-    groups[0] = defaultIntervals[groups[2]];
-    groups[2] = shorthandToPeriod[groups[2]];
-    parsedPeriod = groups;
+module.exports = function ({ symbols, userPeriod }) {
+  let parsedPeriod = [1, 'day', 3, 'month'];
+  if (userPeriod && Object.keys(periods).includes(userPeriod)) {
+    parsedPeriod = periods[userPeriod];
   }
   let currentParams = JSON.parse(JSON.stringify(referenceParams(parsedPeriod)));
   symbols.forEach((symbol) => {
@@ -75,3 +73,5 @@ module.exports = function ({ symbols, period }) {
   });
   return encode(JSON.stringify(currentParams));
 };
+
+module.exports.allowedPeriods = Object.keys(periods);

@@ -6,6 +6,7 @@ const { parse } = require('discord-command-parser');
 const captureWebsite = require('capture-website');
 const fs = require('fs');
 const generateParams = require('./generate-params');
+const allowedPeriods = generateParams.allowedPeriods;
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -19,8 +20,8 @@ client.on('message', async msg => {
     const id = uuidv4();
     const symbols = parsed.reader.getString().split(',');
     const firstSymbol = symbols[0];
-    const period = parsed.reader.getString(false, s => /^[0-9]{1,2}[mdy]$/.test(s));
-    msg.channel.send('Working on it...');
+    const period = parsed.reader.getString(false);
+    msg.channel.send(`Working...${period && !allowedPeriods.includes(period) ? `with invalid period (${allowedPeriods.join(',')})` : ''}`);
     const generatedUrl = `https://finance.yahoo.com/quote/${firstSymbol}/chart?p=${firstSymbol}#${generateParams({ symbols, period })}`;
     try {
       await captureWebsite.file(generatedUrl,
@@ -28,11 +29,15 @@ client.on('message', async msg => {
         {
           hideElements: [
             '#YDC-UH',
-            '#mrt-node-Col1-7-Footer'
+            '#YDC-Nav',
+            '#mrt-node-Col1-7-Footer',
+            '.stx_chart_controls',
+            '.stx_jump_today',
           ],
           fullPage: true,
-          //scrollToElement: '.qsp-watchlist-add',
-          emulateDevice: 'iPad',
+          scrollToElement: '.stx-panel-chart',
+          //delay: 1,
+          //emulateDevice: 'iPad',
           element: '.stx-panel-chart',
           timeout: 20,
         });
