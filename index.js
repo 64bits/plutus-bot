@@ -5,6 +5,7 @@ const client = new Discord.Client();
 const { parse } = require('discord-command-parser');
 const captureWebsite = require('capture-website');
 const fs = require('fs');
+const generateParams = require('./generate-params');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -14,12 +15,13 @@ client.on('message', async msg => {
   const parsed = parse(msg, '?');
   // User isn't trying to invoke the bot, leave it
   if(!parsed.success) return;
-  if (parsed.command === 'yahoo') {
+  if (parsed.command === process.env.COMMAND || 'yahoo') {
     const id = uuidv4();
-    const symbol = parsed.reader.getString();
+    const symbols = parsed.reader.getString().split(',');
+    const firstSymbol = symbols[0];
     msg.channel.send('Working on it...');
     try {
-      await captureWebsite.file(`https://finance.yahoo.com/quote/${symbol}/chart?p=${symbol}`,
+      await captureWebsite.file(`https://finance.yahoo.com/quote/${firstSymbol}/chart?p=${firstSymbol}#${generateParams({ symbols })}`,
         `./shots/${id}.png`,
         {
           hideElements: [
@@ -36,11 +38,11 @@ client.on('message', async msg => {
         files: [`./shots/${id}.png`]
       });
       fs.unlink(`./shots/${id}.png`, (err) => {
-        console.error(err);
+        if(err) console.error(err);
       });
     } catch (err) {
       console.error(err);
-      msg.channel.send(`Seems invalid...${symbol}?`);
+      msg.channel.send(`Seems invalid...${firstSymbol}?`);
     }
   }
 });
