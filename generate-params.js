@@ -2,6 +2,18 @@ const { encode } = require('js-base64');
 const referenceParams = require('./reference-params');
 const randomColor = require('./random-color');
 
+const shorthandToPeriod = {
+  d: 'day',
+  m: 'month',
+  y: 'year',
+}
+
+const defaultIntervals = {
+  d: 'minute',
+  m: 'hour',
+  y: 'week',
+}
+
 function generateSymbolObject(symbol, period) {
   return {
     "symbol":`${symbol}`,
@@ -50,7 +62,13 @@ function generateSymbolObject(symbol, period) {
 }
 
 module.exports = function ({ symbols, period }) {
-  let parsedPeriod = period ? period.split(',') : ['day', '3', 'month'];
+  let parsedPeriod = ['day', '3', 'month'];
+  if (period) {
+    const groups = period.match(/^([0-9]{1,2})([mdy])$/);
+    groups[0] = defaultIntervals[groups[2]];
+    groups[2] = shorthandToPeriod[groups[2]];
+    parsedPeriod = groups;
+  }
   let currentParams = JSON.parse(JSON.stringify(referenceParams(parsedPeriod)));
   symbols.forEach((symbol) => {
     currentParams.symbols.push(generateSymbolObject(symbol, parsedPeriod))

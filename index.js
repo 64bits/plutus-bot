@@ -19,7 +19,7 @@ client.on('message', async msg => {
     const id = uuidv4();
     const symbols = parsed.reader.getString().split(',');
     const firstSymbol = symbols[0];
-    const period = parsed.reader.getString(false, s => s.split(',').length === 3);
+    const period = parsed.reader.getString(false, s => /^[0-9]{1,2}[mdy]$/.test(s));
     msg.channel.send('Working on it...');
     const generatedUrl = `https://finance.yahoo.com/quote/${firstSymbol}/chart?p=${firstSymbol}#${generateParams({ symbols, period })}`;
     try {
