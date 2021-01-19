@@ -22,7 +22,8 @@ client.on('message', async msg => {
     const symbols = parsed.reader.getString().split(',');
     const firstSymbol = symbols[0];
     const period = parsed.reader.getString(false);
-    const origMessage = await msg.channel.send(`Working...${period && !allowedPeriods.includes(period) ? `with invalid period (${allowedPeriods.join(',')})` : ''}`);
+    await msg.react('👀');
+    const addonMessage = `${period && !allowedPeriods.includes(period) ? `invalid period (${allowedPeriods.join(',')})` : ''}`;
     const generatedUrl = `https://finance.yahoo.com/quote/${firstSymbol}/chart?p=${firstSymbol}#${generateParams({ symbols, period })}`;
     try {
       tiny.shorten(generatedUrl, async (res, err) => {
@@ -46,8 +47,7 @@ client.on('message', async msg => {
               element: '.stx-panel-chart',
               timeout: 20,
             });
-          await origMessage.edit(`<${res}>`);
-          await msg.channel.send(new Discord.MessageAttachment(`./shots/${id}.png`));
+          await msg.channel.send(`<${res}> ${addonMessage}`, new Discord.MessageAttachment(`./shots/${id}.png`));
           fs.unlink(`./shots/${id}.png`, (err) => {
             if(err) console.error(err);
           });
