@@ -5,6 +5,7 @@ const client = new Discord.Client();
 const { parse } = require('discord-command-parser');
 const captureWebsite = require('capture-website');
 const fs = require('fs');
+const tiny = require('tinyurl');
 const generateParams = require('./generate-params');
 const allowedPeriods = generateParams.allowedPeriods;
 
@@ -41,9 +42,16 @@ client.on('message', async msg => {
           element: '.stx-panel-chart',
           timeout: 20,
         });
-      await msg.channel.send('Here you go!', {
+      await msg.channel.send('Here you go', {
         files: [`./shots/${id}.png`]
       });
+      tiny.shorten(generatedUrl, (res, err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          msg.channel.send(`<${res}>`);
+        }
+      })
       fs.unlink(`./shots/${id}.png`, (err) => {
         if(err) console.error(err);
       });
